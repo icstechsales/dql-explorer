@@ -13,13 +13,21 @@ Scott Good provides a demo that includes some configurations aspects not shown i
 - The Web application relies on Domino Access Services (DAS) being enabled on the dqlexplorer.nsf (default), but that means there is a need to be enable DAS on your server.  The following example show how to enable the Data service on a server.
 
   - If internet site documents are enabled, do the following:
+
     a.	Create or edit an internet site document.
+
     b.	On the Configuration tab, under Domino Access Services, edit the Enabled services field. Type 'Data' to enable the data service.
+
     c.	Save the document.
+
   - If internet site documents are disabled, do the following:
+
     a.	Edit the server document.
+
     b.	On the Internet Protocols tab, click Domino Web Engine.
+
     c.	Under Domino Access Services, select 'Data' for Enabled Services.
+    
     d.	Save the document.
 
 - Configure the ACL as you would any Domino database.  The roles DQLXAuthors and DQLXReaders will give those that belong to these roles either reader or author access to all queries stored in the database, only give it to administrators or department admins.  All users with regular Author access to the database can create/share queries without needing these roles. 
