@@ -7,9 +7,11 @@ Scott Good provides a demo that includes some configurations aspects not shown i
 
 ## Configure
 
-- Clone this repository
-- Place the dqlexplorer.nsf on your Domino 10 server (currently it needs to be deployed in the root of your data directory.
-- The database runs 3 agents, you will need to sign the database so the agents can run on your server
+Note: Try this on a development server.  
+
+- Clone this repository. 
+- Place the dqlexplorer.nsf on your Domino 10 server (currently it needs to be deployed in the root of your data directory).
+- The database runs 3 agents, you will need to sign the database so the agents can run on your server. 
 - The Web application relies on Domino Access Services (DAS) being enabled on the dqlexplorer.nsf (default), but that means there is a need to be enable DAS on your server.  The following example show how to enable the Data service on a server.
 
   - If internet site documents are enabled, do the following:
@@ -27,12 +29,12 @@ Scott Good provides a demo that includes some configurations aspects not shown i
     b.	On the Internet Protocols tab, click Domino Web Engine.
 
     c.	Under Domino Access Services, select 'Data' for Enabled Services.
-    
+
     d.	Save the document.
 
 - Configure the ACL as you would any Domino database.  The roles DQLXAuthors and DQLXReaders will give those that belong to these roles either reader or author access to all queries stored in the database, only give it to administrators or department admins.  All users with regular Author access to the database can create/share queries without needing these roles. 
-- Edit the lookup document in the dqlexplorer.nsf and setup directories or databases that you want to make available via the DQL Explorer (see Scott's demo of that here: https://youtu.be/Cfw_6Wvk8c8?t=440) 
-- Update the package.json in this project to point the proxy(domino_server_url) and homepage (domino_server_url/dqlexplorer.nsf) to your Domino server's url, use http (not https) 
+- Edit the lookup document in the dqlexplorer.nsf and setup directories or databases that you want to make available via the DQL Explorer (see Scott's demo of that here: https://youtu.be/Cfw_6Wvk8c8?t=440).
+- For development, update the package.json in this project to point the proxy (domino_server_url) and homepage (domino_server_url/dqlexplorer.nsf) to your Domino server's url, use http (not https).
 
 ## Available Scripts
 
