@@ -1,0 +1,524 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,900');
+* {
+	font-family: Roboto, Arial, Tahoma, sans-serif!important;
+	font-size: 14px;
+}
+body {
+  margin: 0;
+  padding: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #f3f3f3;
+}
+div.App {
+  background: white;
+  padding: 0 0 15px 0;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.adv-options {
+  padding-left: 10px
+}
+
+body .ms-Dropdown {
+  width: 320px;
+  margin: 0 10px 0 0;
+  max-width: 350px;
+}
+body .ms-TextField input {
+  width: 100%;
+  margin: 0 10px 0 0;
+}
+body .ms-Dropdown.operators {
+  width: 60px;
+  top: 2px;
+}
+body .ms-Dropdown.operators .ms-Dropdown-title:first-of-type {
+  top: -2px;
+  left: -2px;
+  width: 61px;
+  border-radius: 5px;
+  border-color: #ccc;
+}
+body .selectFields .ms-Dropdown-title,
+body .valueField .ms-TextField-fieldGroup {
+  border-radius: 5px;
+  border-color: #ccc;
+}
+.ms-Dropdown:hover .ms-Dropdown-titleIsPlaceHolder,
+.ms-TextField-fieldGroup:hover {
+  color: rgb(39, 39, 39);
+  border-color: #999!important;
+}
+body .valueField .ms-TextField-fieldGroup {
+  margin-right: 5px;
+}
+.queryContainer {
+  border: 1pt solid #bbb;
+  padding: 10px 12px 0;
+  background: #ddd;
+  display: block;
+  border-radius: 6px;
+}
+.childrenConditions.queryItem {
+  display: block;
+}
+.queryContainer .query.conditionGroup .childrenConditions::before {
+  content: "";
+  border-left: 2pt solid #aaa;
+  position: absolute;
+  height: calc(100% - 82px);
+  left: 53px;
+  z-index: 1;
+}
+.xqueryContainer .query.conditionGroup .childrenConditions .childrenConditions::before {
+  border-left: none;
+  border-bottom: 2pt solid #aaa;
+  left: -19px;
+  width: 20px;
+  z-index: 1;
+  height: 2px;
+}
+.queryContainer .queryContainer {
+  padding: 10px 12px 0;
+  background: #bbb;
+}
+body div.queryArea {
+  display: block;
+  width: auto;
+  position: relative;
+}
+body div.queryArea div.queryArea {
+  xmargin-left: 60px;
+}
+.queryOuterContainer .queryArea {
+  margin-bottom: 10px;
+  min-width: 1050px;
+}
+.queryOuterContainer .queryArea .queryArea {
+  margin-bottom: 0;
+  min-width: 1020px;
+}
+.query.condition {
+  display:block;
+}
+.queryNameArea {
+  padding-bottom: 10px;
+  border-bottom: 1pt solid #ddd;
+  margin-bottom: 10px;
+}
+.queryRow {
+  height: 40px;
+  background: white;
+  padding: 10px 3px 3px 11px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 2;
+}
+.queryItem {
+  padding: 0 0 2px 0;
+}
+.queryItem div {
+  display: inline-block;
+}
+.queryItem div.queryContainer {
+  display: block;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+}
+.queryItem .valueGroup,
+.queryItem .groupCancel {
+  position: relative;
+  top: -11px;
+}
+.queryItem .groupCancel {
+  left: 5px;
+}
+.valueGroup .ms-Button--icon {
+  background: transparent;
+  padding: 3px 0 0 0;
+  border-radius: 5px;
+  border: 1pt solid #ddd;
+}
+.valueGroup .ms-Button--icon:hover {
+  border-color: #999;
+}
+.valueGroup .ms-Button--icon.is-checked {
+  background: #aaa;
+  color: #000;
+}
+.valueGroup .plusButton {
+  top: -8px;
+  position: relative;
+  margin-right: 5px;
+}
+.valueGroup .valuesPicker {
+  position: relative;
+  top: 11px;
+  margin-right: -10px;
+}
+.valueGroup .valuesPicker .ms-Dropdown-title {
+  border-radius: 5px;
+  border-color: #ddd;
+}
+.valueGroup button i {
+  color: #999;
+  position: relative;
+  top: 3px;
+}
+.valueGroup button:hover i {
+  color: rgb(51, 51, 51);;
+  position: relative;
+  top: 3px;
+}
+.queryItem .groupCancel {
+  top: -20px;
+}
+.groupCancel button {
+  min-width: 40px;
+  width: 40px;
+  padding: 7px 7px 3px 0;
+  background: transparent;
+  color: #999;
+}
+.groupCancel button:hover {
+  color: #000;
+  background: transparent;
+}
+.queryItem .valueGroup input {
+  padding: 7px 10px;
+}
+.qnLabel {
+  display: inline-block;
+  padding-right: 10px;
+}
+#queryName {
+  width: 300px;
+  padding: 5px;
+}
+.operators,
+.conditionGroupButton {
+  border: 1pt solid #ccc;
+  height: 30px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.operators.condition {
+  position: relative;
+  top: -11px;
+  height: 32px;
+}
+.conditionGroupButton.addCondition,
+.conditionGroupButton.addGroup,
+.conditionGroupButton.removeGroup {
+  background: #eee;
+  color: #999;
+  min-width: 30px;
+}
+.conditionGroupButton.addCondition:hover,
+.conditionGroupButton.addGroup:hover {
+  background: #00cc99;
+  color: #fff;
+  border-color: #00a37a;
+}
+.conditionGroupButton.removeGroup:hover {
+  background: #ec002a;
+  color: #fff;
+  border-color: #b60020;
+}
+input::placeholder,
+::-webkit-input-placeholder ,
+::-moz-placeholder,
+:-ms-input-placeholder,
+:-moz-placeholder { /* Firefox 18- */
+  color: pink;
+}
+.query .ms-Grid-row {
+  margin-top: 9px;
+}
+div.ms-CommandBar,
+button.ms-Button--commandBar  {
+  background: #066999;
+  color: white;
+}
+button.ms-Button--commandBar .ms-Button-label {
+  font-weight: 600;
+}
+button.runQueryButton {
+  margin-top: 10px;
+}
+button.runExplainButton {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+pre, xmp, plaintext, listing {
+  font-family: monospace!important;
+}
+pre.queryDisplay {
+  border: 1pt solid #c28c00;
+  padding: 10px;
+  font-size: 1.2em;
+  background: #ffce4d;
+  margin: 0;
+}
+pre.queryDisplay.noQuery {
+  display:none;
+}
+.inFieldIcon {
+  color: #bbb;
+  position: absolute;
+  right: 5px;
+  top: 9px;
+}
+.valueField.textField i {
+  color: #bbb;
+}
+.menuIcon-240 {
+  position: relative;
+  top: 3px;
+}
+.menuIcon-240:hover {
+  color: #666;
+}
+.resultsColPicker {
+  margin: 5px 0 10px;
+}
+.resultsCount {
+  display: inline-block;
+  position: relative;
+  top: 18px;
+  left: 10px;
+  color: #666;
+}
+.devHeader {
+  border-bottom: 1px solid #a6a6a6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+}
+
+.devButton {
+  background: none !important;
+  background-color: transparent !important;
+  border: 1px solid #a6a6a6 !important;
+  border-bottom: 0 !important;
+  border-top-left-radius: 4px !important;
+  border-top-right-radius: 4px !important;
+  line-height: 1 !important;
+  padding: 4px 12px !important;
+  min-width: 100px !important;
+  -webkit-transition: border .367s cubic-bezier(0.1, 0.9, 0.2, 1);
+  transition: border .367s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+
+.advanced-options {
+  padding-top: 10px;
+}
+.advanced-options button.ms-Button--command {
+  border: 1pt solid #ddd;
+    border-bottom: none;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 30px;
+    margin: 0 -4px 0 0;
+    padding: 15px 17px 11px 13px;
+    height: 28px;
+    color: #999;
+    background: #eee;
+    position: relative;
+    top: 1px;
+}
+.advanced-options button.ms-Button--command:hover {
+  color: #444;
+  background: #ddd;
+}
+.advanced-options button.ms-Button--command::before {
+  border-bottom: none!important;
+}
+.advanced-options button.ms-Button--command.is-selected {
+  background: rgb(62, 118, 192);
+  padding: 17px 15px 14px 10px;
+  color: white;
+  border-color: #205fb1;
+  border-bottom: 1pt solid rgb(62,118,192);
+  position: relative;
+  top: -4px;
+  z-index: 2;
+}
+.codeDisplayArea {
+  border: 1pt solid #ddd;
+  width: 800px;
+  border-radius: 5px;
+  padding: 10px 10px 10px 20px;
+  position: relative;
+  top: -5px;
+  z-index:1;
+}
+.filePath {
+  font-size: 2rem;
+  font-weight: 900;
+  color: rgb(62, 118, 192);
+  margin: 15px 0 0;
+  border-bottom: 1pt solid #ddd;
+  padding-bottom: 16px;
+  font-family: Roboto, Helvetica, Arial, Tahoma, sans-serif;
+}
+.filePath .queryTitle {
+  font-size: 2rem;
+  font-weight: 900;
+  color: rgb(62, 118, 192);
+  margin: 25px 0 -13px 0;
+  padding-bottom: 10px;
+  font-family: Roboto, Helvetica, Arial, Tahoma, sans-serif;
+}
+
+.filePath .dbName {
+  font-size: 0.9rem;
+    color: black;
+    font-weight: 300;
+    display: block;
+    margin-top: 5px;
+    position: absolute;
+    right: 18px;
+    top: 10px;
+}
+.saved-time {
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #444;
+  position: absolute;
+  right: 18px;
+  top: 34px;
+}
+.filePath .dbName strong,
+.saved-time strong {
+  color: #666;
+  font-size: 0.9rem;
+}
+.saved-time strong {
+  font-weight: 300;
+  color: #444;
+}
+.action-buttons {
+  margin-bottom: 5px;
+}
+.queryOuterContainer label {
+  font-weight: 900;
+  color: rgb(62, 118, 192);
+  font-family: Roboto, Helvetica, Arial, Tahoma, sans-serif;
+}
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #fff;
+  color: black;
+  margin-top: -22px;
+}
+.bash.hljs,
+.sql.hljs {
+  margin-top: 0;
+}
+.ms-FocusZone .ms-Pivot {
+  margin-left: 200px;
+}
+.advanced-options .ms-FocusZone .ms-Pivot {
+  margin-left: 0;
+}
+.ms-DetailsHeader-cellTitle {
+  font-weight: 600;
+  color: rgb(51,51,51)
+}
+.ms-FocusZone.ms-DetailsHeader {
+  border-bottom-color: rgb(62, 118, 192);
+  cursor: pointer;
+}
+.ms-FocusZone.ms-DetailsRow {
+  cursor: pointer;
+}
+div.savedQueriesColumn {
+  min-width: 230px;
+  margin-top: 4px;
+  height: 100vh;
+}
+.ms-Toggle.adv-options {
+  margin-top: 17px;
+  margin-left: -10px;
+}
+button.viewResultsButton {
+  background: none;
+  color: rgb(62,118,192);
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: -8px;
+  left: 8px;
+  cursor: pointer;
+}
+button.viewResultsButton:hover {
+  background: none;
+  color: rgb(62,118,192);
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: -8px;
+  left: 8px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+button.hiddenButton {
+  display:none;
+}
+.ms-Dropdown.dataTypePicker {
+  width: 200px;
+}
+.advancedOptionsOuter {
+  padding-bottom: 10px;
+}
+.errorContainer {
+  padding: 15px;
+  border: 1pt solid #ddd;
+}
+.errorContainer h1 {
+  font-size: 2em;
+  margin: 0 0 5px 0;
+  color: rgb(62, 118, 192);
+}
+.errorContent {
+
+}
+.errorText {
+
+}
+body .ms-Dropdown.fvfPicker {
+  margin-bottom: 10px;
+}
+div[role='menubar'] button i.ms-Button-icon[data-icon-name="Download"] {
+  color: rgba(255,255,255,0.4);
+}
+div[role='menubar'] button:hover i.ms-Button-icon[data-icon-name="Download"] {
+  color: rgb(55,106,172)!important;
+}
+
+.show-activity {
+  font-weight: 300;
+  font-size: 10px;
+  color: rgb(62, 118, 192);
+  position: absolute;
+  right: 18px;
+  top: 53px;
+}
+.show-activity:hover {
+  cursor: pointer;
+}
+.activity-entry {
+  margin-bottom: 8px;
+}
