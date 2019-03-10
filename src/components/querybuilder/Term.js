@@ -110,26 +110,26 @@ const Term = ({ index, indexValue, addTermValue, removeTerm, onTermChange, onVal
           text: field.displayName,
           data: { icon: iconType === 'date' ? 'Calendar' : iconType === 'number' ? 'NumberSymbol' : iconType === 'name' ? 'user' : 'InsertTextBox',
                   type: iconType }
-        })
-        options.sort(compare);
+        });
         return options;
       })
     }
   }
 
   if ((formviewfolder === 'views') || (formviewfolder === 'folders')) {  
-    selectedObject = selectedDatabase.viewsfolders.find(viewfolder => viewfolder.name === fvfName);
-
+    selectedObject = selectedDatabase.viewsfolders.find(viewfolder => viewfolder.alias !== '' ? viewfolder.alias === fvfName : viewfolder.name === fvfName);
     if (selectedObject) {
       selectedObject.columns.map((column) => {
         let iconType = 'text';
 
-        options.push({
-          key: column.name,
-          text: column.displayName,
-          data: { icon: 'InsertTextBox',
-                type: iconType }
-        })
+        if (column.displayName !== '') {
+          options.push({
+            key: column.name,
+            text: column.displayName,
+            data: { icon: 'InsertTextBox',
+                  type: iconType }
+          });
+        }
         return options;
       })
     }
@@ -162,7 +162,7 @@ const Term = ({ index, indexValue, addTermValue, removeTerm, onTermChange, onVal
               onChange={(event, data) =>
                 onTermChange(index, "identifier", data)
               }
-              options={options}
+              options={options.sort(compare)}
               onRenderOption={_onRenderOption}
             />
           </div>

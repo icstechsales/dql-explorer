@@ -83,8 +83,7 @@ class QueryBuilderApp extends React.Component {
         this.setState({
           queryRunning: false
         });
-        this.props.onChangeResults(response.data);
-        // if (response.data.length > 0) this.props.handlePivotClick('results');
+          this.props.onChangeResults(response.data);
       });
   };
 
@@ -98,7 +97,7 @@ class QueryBuilderApp extends React.Component {
 
     axios
       .get(
-        `${context}runDQLExplain?openagent&query=${escape(
+        `${context}runDQLExplain2?openagent&query=${escape(
           dqlquery
         )}&fields=${fields}&database=${filepath}`,
         {},
@@ -200,7 +199,7 @@ class QueryBuilderApp extends React.Component {
       results,
       explain,
       query, 
-      formaction: { queryValid, runquery},
+      formaction: { queryValid, runquery, errormessage, explainerrormessage },
       onTermChangeColumnsToDisplay,
       handleQueryNameChange,
       formdata: { queryname, unid, saved, displaysaved, date, queryAuthor, queryReader },
@@ -234,7 +233,7 @@ class QueryBuilderApp extends React.Component {
     let selectedObject = undefined; 
     let options = [];
 
-    if (formviewfolder === 'forms') {
+    if (formviewfolder === 'forms' && selectedDatabase.forms) {
       selectedObject = selectedDatabase.forms.find(form => form.name === fvfName);
 
       if (selectedObject) {
@@ -249,26 +248,35 @@ class QueryBuilderApp extends React.Component {
 
     }
 
-    if ((formviewfolder === 'views') || (formviewfolder === 'folders')) {
-      selectedObject = selectedDatabase.viewsfolders.find(viewfolder => viewfolder.name === fvfName);
+    if (((formviewfolder === 'views') || (formviewfolder === 'folders')) && selectedDatabase.viewsfolders) {
+      selectedObject = selectedDatabase.viewsfolders.find(viewfolder => viewfolder.alias !== '' ? viewfolder.alias === fvfName : viewfolder.name === fvfName);
 
       if (selectedObject) {
         selectedObject.columns.map((column) => {
-          options.push({
-            key: column.name,
-            text: column.displayName
-          })
+          if (column.displayName !== '') {
+            options.push({
+              key: column.name,
+              text: column.displayName
+            })
+          }
           return options;
         })
       }
     }
 
+
     const type = query.id.split("~")[0];
     const index = query.id.split("~")[1];
     let queryString =  queryToString(query, 0, formviewfolder, fvfName);
-    if (formviewfolder === 'forms') {
-      queryString = `Form = '${fvfName}' and ${queryString}`
-    }
+    // if (formviewfolder === 'forms') {
+    //   queryString = `Form = '${fvfName}' and ${queryString}`
+    // }
+    // if (formviewfolder === 'forms' && queryString !== '') {
+    //   queryString = `Form = '${fvfName}' and ${queryString}`
+    // } else {
+    //   queryString = `Form = '${fvfName}'`
+    // }
+
     let nodejs = `
 /**
  * @author Domino Admin <domino.admin@example.com>
@@ -417,26 +425,32 @@ End Sub
         }
 
         {queryString !== "" && runquery && queryValid && !queryRunning &&
-          <div className="resultsCount">
-            {
-              results && results.length > 1 
-              ? `(${results.length} matching documents found)` 
-              : results && results.length === 1 
-              ? `(${results.length} matching document found)`
-              : !results || results.length === 0
-              ? `(${results.length} matching documents found)`
-              : ''
-            }
-            <PrimaryButton
-              className={(results.length===0) ? "hiddenButton" : "viewResultsButton"}
-              onClick={this.go2Results}
-              disabled={(queryString === "" || queryRunning) ? true : false}
-            >
-              view results
-            </PrimaryButton>
-          </div>
+          <React.Fragment>
+            <div className="resultsCount">
+              {
+                results && results.length > 1 
+                ? `(${results.length} matching documents found)` 
+                : results && results.length === 1 
+                ? `(${results.length} matching document found)`
+                : !results || results.length === 0
+                ? `(${results.length} matching documents found)`
+                : ''
+              }
+              <PrimaryButton
+                className={(results.length===0) ? "hiddenButton" : "viewResultsButton"}
+                onClick={this.go2Results}
+                disabled={(queryString === "" || queryRunning) ? true : false}
+              >
+                view results
+              </PrimaryButton>
+            </div>
+            <p className="errorMessage">
+              {errormessage}
+            </p>
+          </React.Fragment>
         }
-
+        {
+        }
         <Toggle
           className="adv-options"
           defaultChecked={false}
@@ -492,8 +506,11 @@ End Sub
                 >
                   Run Explain
                 </PrimaryButton>
-                <CodeBlock refValue="explain" classValue="html">                  
+                <CodeBlock refValue="explain" classValue="html">
                   {explain}
+                </CodeBlock>
+                <CodeBlock refValue="explain" classValue="html">
+                  {explainerrormessage}
                 </CodeBlock>
               </div>
             </PivotItem>

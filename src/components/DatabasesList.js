@@ -132,7 +132,7 @@ class DatabaseList extends React.Component {
 
     axios
       .get(
-        `${context}getdatabases?OpenAgent`,
+        `${context}getdatabasesfromserver?OpenAgent`,
         {},
         {}
       )

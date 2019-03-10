@@ -69,8 +69,8 @@ class ShareDialog extends React.Component {
             </div>
           )}
           <DialogFooter>
-            <PrimaryButton onClick={this._closeDialog} text="Save" />
-            <DefaultButton onClick={this._cancelDialog} text="Cancel" />
+            <PrimaryButton onClick={this._closeDialog} text="Close" />
+            {/* <DefaultButton onClick={this._cancelDialog} text="Cancel" /> */}
           </DialogFooter>
         </Dialog>
       </div>
