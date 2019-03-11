@@ -97,7 +97,7 @@ class QueryBuilderApp extends React.Component {
 
     axios
       .get(
-        `${context}runDQLExplain2?openagent&query=${escape(
+        `${context}runDQLExplain?openagent&query=${escape(
           dqlquery
         )}&fields=${fields}&database=${filepath}`,
         {},
