@@ -9,6 +9,10 @@ Scott Good provides a demo that includes some configurations aspects not shown i
 
 Go to the [Releases tab](https://github.com/icstechsales/dql-explorer/releases) for the latest version and update notes.
 
+## Requirements
+
+The Domino Query Language (DQL) uses design data extracted from view notes. This information is stored in a special database called a design catalog and named GQFDsgn.cat.  You must create a design catalog before ~a Node.js developer~ any attempts to use DQL, using DQL Explorer, Node.JS, LotusScript, Java, server console, etc... to query any database. Now that I slightly corrected the documentation, feel free to follow the remainder of the steps as outlined in the [DQL documentation](https://doc.cwpcollaboration.com/appdevpack/docs/en/design-catalog-admin.html) to create the design catalog and add your target databases to it.
+
 ## Configure
 
 Note: Try this on a development server.  
