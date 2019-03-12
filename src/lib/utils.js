@@ -64,7 +64,8 @@ export function queryToString(query, pos, formviewfolder, fvfName) {
   let tempStr = _queryToString(query, pos, formviewfolder, fvfName);
 
   if (formviewfolder === 'forms' && tempStr !== '') {
-    tempStr = `Form = '${fvfName}' and ${tempStr}`
+    // tempStr = `Form = '${fvfName}' and ${tempStr}`;
+    tempStr = `${tempStr}`;
   } else if (formviewfolder === 'forms' && tempStr === '') {
     tempStr = `Form = '${fvfName}'`
   }
