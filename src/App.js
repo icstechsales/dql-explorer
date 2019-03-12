@@ -707,7 +707,7 @@ Scott Good https://scott-good.github.io/
 
   onTermDateChange = (id, attribute, data) => {
     if (data) {
-      const newValue =data.getFullYear() + "-" + ('0' + data.getMonth() + 1).slice(-2) + "-" + ('0' + data.getDate()).slice(-2);
+      const newValue =data.getFullYear() + "-" + ('0' + (data.getMonth() + 1)).slice(-2) + "-" + ('0' + data.getDate()).slice(-2);
       let children = this.state.query.children;
       let entryToUpdate = this._getObject(children, id);
 
