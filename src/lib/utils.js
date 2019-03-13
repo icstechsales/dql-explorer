@@ -1,9 +1,9 @@
-
 /**
- * @file Contains a set of utility functions to manipulate arrays to specific formatted strings
- * @author Dimitri Prosper <dimitri_prosper@us.ibm.com>, <dimitri.prosper@gmail.com>, https://dprosper.github.io
- * @author Scott Good <scott.good@us.ibm.com>, https://scott-good.github.io/
- * @todo see inline TODO comments
+ * Copyright (c) International Business Machines
+ * 
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
  */
 
 const _selectedToString = (selectedItems) => {

@@ -1,0 +1,10 @@
+This application makes use of:
+
+- The MIT licensed Office UI Fabric React components: https://github.com/OfficeDev/office-ui-fabric-react/blob/master/LICENSE.  
+    - The fonts and icons not covered under the MIT license are not used.
+    - Some components in the application are derived from components usage example on the https://github.com/OfficeDev/office-ui-fabric-react repository.
+
+- The free Fontawesome library is used for icons: https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt
+
+- The Google Roboto font is used: https://github.com/google/roboto/blob/master/LICENSE
+

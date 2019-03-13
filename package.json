@@ -8,7 +8,7 @@
       "email": "scott.good@us.ibm.com"
     }
   ],
-  "license": "IBM Internal Use Only until fate determined",
+  "license": "MIT",
   "description": "DQL Explorer PoC for IBM Think 2019",
   "private": true,
   "dependencies": {

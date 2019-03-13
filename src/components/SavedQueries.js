@@ -1,9 +1,9 @@
 /**
- * @file Component to read and display the saved queries on the server
- * @author Dimitri Prosper (IBM) <dimitri_prosper@us.ibm.com>
- * @author Dimitri Prosper (Personal) <dimitri.prosper@gmail.com>
- * @contributor Scott Good (IBM) <scott.good@us.ibm.com>
- * @todo see inline TODO comments
+ * Copyright (c) International Business Machines
+ * 
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
  */
 
 import React from 'react';
