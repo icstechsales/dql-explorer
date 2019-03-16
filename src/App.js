@@ -1,7 +1,17 @@
 /**
- * @author Dimitri Prosper <dimitri_prosper@us.ibm.com>, <dimitri.prosper@gmail.com>, https://dprosper.github.io
- * @author Scott Good <scott.good@us.ibm.com>, https://scott-good.github.io/
- * @todo see inline TODO comments
+ * Copyright (c) IBM Corp. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the “License”);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an “AS IS” BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import React, { Component } from 'react';
@@ -29,7 +39,7 @@ import {
   faDownload, faSortAlphaDown, faSortAlphaUp, faSortAmountDown, faUser, faPlusCircle
  } from '@fortawesome/free-solid-svg-icons';
 
-import { people } from './components/querybuilder/PeoplePickerData';
+import { people } from './components/querybuilder/PeoplePicker';
 
 library.add(faSave, faUser, faPlusCircle, faCalendar, faCheck, faDownload, faSortAlphaDown, faSortAlphaUp, faSortAmountDown, faTimes, faHashtag, faBold, faTrashAlt, faShareSquare, faDatabase, faFolder, faTasks, faGripHorizontal, faGlobe, faUsers, faTable, faFile, faChevronDown, faChevronUp, faChevronRight, faChevronLeft, faArrowDown, faArrowUp, faArrowLeft, faArrowRight, faTag)
 
@@ -544,6 +554,7 @@ Scott Good https://scott-good.github.io/
 
   addTerm = index => {
     let children = this.state.query.children;
+
     const term = {
       id: `term~${uuidv4()}`,
       identifier: "",
@@ -670,11 +681,17 @@ Scott Good https://scott-good.github.io/
 
   onTermChange = (index, attribute, data) => {
     const newValue = typeof data === "object" ? data.key : data;
-
     let children = this.state.query.children;
     let term = this._getObject(children, `term~${index}`);
 
     term[attribute] = newValue;
+
+    if (data.data.type === 'date') {
+      const date = new Date();
+      const dateString = date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2);
+      term.dateValue=date;
+      term.value=dateString;
+    }
 
     this.setState(
       update(this.state, {
@@ -714,6 +731,7 @@ Scott Good https://scott-good.github.io/
       entryToUpdate[attribute]=newValue;
       entryToUpdate.dateValue=data;
 
+      console.log(entryToUpdate)
       this.setState(
         update(this.state, {
           query: { children: { $set: children } },

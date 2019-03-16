@@ -1,5 +1,20 @@
-import React from 'react';
+/**
+ * Copyright (c) IBM Corp. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the “License”);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an “AS IS” BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+import React from 'react';
 import { BaseComponent } from 'office-ui-fabric-react/lib/Utilities';
 import {
   NormalPeoplePicker,
@@ -8,8 +23,6 @@ import {
 import { Promise } from 'es6-promise';
 import { Label } from "office-ui-fabric-react";
 
-// Helper imports to generate data for this particular examples. Not exported by any package.
-import { people, mru } from './PeoplePickerData';
 import withApp from '../../withApp';
 
 const suggestionProps = {
@@ -22,8 +35,40 @@ const suggestionProps = {
   suggestionsContainerAriaLabel: 'Suggested names'
 };
 
+export const people = [
+  {
+    key: 1,
+    imageInitials: 'AM',
+    text: 'Andrew Manby',
+    // secondaryText: 'Director, Product Management',
+    tertiaryText: 'CN=Andrew Manby/O=MyOrg'
+  },
+  {
+    key: 2,
+    imageInitials: 'DP',
+    text: 'Dimitri Prosper',
+    // secondaryText: 'Developer',
+    tertiaryText: 'CN=Dimitri Prosper/O=MyOrg'
+  },
+  {
+    key: 3,
+    imageInitials: 'LG',
+    text: 'Luis Guirigay',
+    // secondaryText: 'Technical Leader',
+    tertiaryText: 'CN=Luis Guirigay/O=MyOrg'
+  },
+  {
+    key: 4,
+    imageInitials: 'SG',
+    text: 'Scott Good',
+    // secondaryText: 'Designer',
+    tertiaryText: 'CN=Scott Good/O=MyOrg'
+  }
+];
+
+const mru = people.slice(0, 5);
+
 class PeoplePicker extends BaseComponent {
-  // All pickers extend from BasePicker specifying the item type.
   _picker = React.createRef();
 
   constructor(props) {
