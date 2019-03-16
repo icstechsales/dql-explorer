@@ -5,13 +5,22 @@ Luis Guirigay and Andrew Manby introduce DQL Explorer at Think 2019: https://you
 
 Scott Good provides a demo that includes some configurations aspects not shown in the stage demo: https://youtu.be/Cfw_6Wvk8c8
 
+## Release Notes
+
+Go to the [Releases tab](https://github.com/icstechsales/dql-explorer/releases) for the latest version and update notes.
+
+## Requirements
+
+The Domino Query Language (DQL) uses design data extracted from view notes. This information is stored in a special database called a design catalog and named GQFDsgn.cat.  You must create a design catalog before ~a Node.js developer~ any attempts to use DQL, using DQL Explorer, Node.JS, LotusScript, Java, server console, etc... to query any database. Now that I slightly corrected the documentation, feel free to follow the remainder of the steps as outlined in the [DQL documentation](https://doc.cwpcollaboration.com/appdevpack/docs/en/design-catalog-admin.html) to create the design catalog and add your target databases to it.
+
 ## Configure
 
 Note: Try this on a development server.  
 
 - Clone this repository. 
-- Place the dqlexplorer.nsf on your Domino 10 server (currently it needs to be deployed in the root of your data directory).
-- The database runs 3 agents, you will need to sign the database so the agents can run on your server. 
+- Using the dqlexplorer.ntf template create a new database called dqlexplorer.nsf (currently it needs to be deployed in the root of your data directory).
+- If you previously deployed dqlexplorer.nsf to your server, you should use the dqlexplorer.ntf to replace (or refresh) the design on your dqlexplorer.nsf.
+- The database runs a number of agents, you will need to sign the database so the agents can run on your server. 
 - The Web application relies on Domino Access Services (DAS) being enabled on the dqlexplorer.nsf (default), but that means there is a need to be enable DAS on your server.  The following example show how to enable the Data service on a server.
 
   - If internet site documents are enabled, do the following:

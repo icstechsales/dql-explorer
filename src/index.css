@@ -522,3 +522,6 @@ div[role='menubar'] button:hover i.ms-Button-icon[data-icon-name="Download"] {
 .activity-entry {
   margin-bottom: 8px;
 }
+.errorMessage {
+  color: #b60020;
+}

@@ -1,7 +1,17 @@
 /**
- * @author Dimitri Prosper <dimitri_prosper@us.ibm.com>, <dimitri.prosper@gmail.com>, https://dprosper.github.io
- * @author Scott Good <scott.good@us.ibm.com>, https://scott-good.github.io/
- * @todo see inline TODO comments
+ * Copyright (c) IBM Corp. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the “License”);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an “AS IS” BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import React, { Component } from 'react';
@@ -29,7 +39,7 @@ import {
   faDownload, faSortAlphaDown, faSortAlphaUp, faSortAmountDown, faUser, faPlusCircle
  } from '@fortawesome/free-solid-svg-icons';
 
-import { people } from './components/querybuilder/PeoplePickerData';
+import { people } from './components/querybuilder/PeoplePicker';
 
 library.add(faSave, faUser, faPlusCircle, faCalendar, faCheck, faDownload, faSortAlphaDown, faSortAlphaUp, faSortAmountDown, faTimes, faHashtag, faBold, faTrashAlt, faShareSquare, faDatabase, faFolder, faTasks, faGripHorizontal, faGlobe, faUsers, faTable, faFile, faChevronDown, faChevronUp, faChevronRight, faChevronLeft, faArrowDown, faArrowUp, faArrowLeft, faArrowRight, faTag)
 
@@ -267,7 +277,12 @@ Scott Good https://scott-good.github.io/
   onReadersChange = (items) => {
     this.setState(
       update(this.state, {
-        formdata: { readers: { $set: items } }
+        formdata: { 
+          readers: { $set: items },
+          saved: { $set: false }
+        },
+        formaction: { queryValid: { $set: false } },
+        explain: { $set: '' }
       })
     );
   };
@@ -275,12 +290,39 @@ Scott Good https://scott-good.github.io/
   onAuthorsChange = (items) => {
     this.setState(
       update(this.state, {
-        formdata: { authors: { $set: items } }
+        formdata: { 
+          authors: { $set: items },
+          saved: { $set: false }
+        },
+        formaction: { queryValid: { $set: false } },
+        explain: { $set: '' }
       })
     );
   };
 
   onChangeFilePath = (selectedDatabase) => {
+    const context = process.env.NODE_ENV === 'development' ? `/dqlexplorer.nsf/` : ``;
+
+    axios
+    .get(
+      `${context}getFormNamesFromDatabase?OpenAgent&path=${selectedDatabase.path}`,
+      {},
+      {}
+    )
+    .then(response => {
+      let forms = response.data;
+      let databases = this.state.databases;
+      let entryToUpdate = this._getObject(databases, selectedDatabase.path);
+
+      entryToUpdate.forms = forms;
+   
+      this.setState(
+        update(this.state, {
+          databases: { $set: databases },
+        })
+      );
+    });
+
     this._initialize(selectedDatabase);
   };
 
@@ -313,88 +355,143 @@ Scott Good https://scott-good.github.io/
     const context = process.env.NODE_ENV === 'development' ? `/dqlexplorer.nsf/` : ``;
 
     this._initialize();
-        // query, selectedDatabase: { databaseName, filepath, formviewfolder, fvfName }, formdata: { queryname, unid, authors, readers }
 
-      axios.get(`${context}api/data/documents/unid/${unid}`, {
-        // auth: this.props.auth,	
-        params: {	
-          ps: 100	
-        }	
-      })	
-      .then((response)=>{	
-        const date = new Date(response.data['@modified']).toUTCString();
-        const { 
-          query, databaseName, 
-          databasePath, collectionName, 
-          collection_readers, collection_authors, 
-          formviewfolder, fvfName, 
-          documentHistoryAction, documentHistoryName, documentHistoryTimestamp,
-          AuthorNames, CreatedBy
-        } = response.data;
-        let readers;
-        let authors;
-        if (collection_readers) {
-          readers = [];
-          if (Array.isArray(collection_readers)) { 
-            collection_readers.map((reader) => {
-              let obj = this._getObject(people, reader);
-              readers.push(obj);
-              return null;
-            })
-  
-          } else {
-            let reader = this._getObject(people, collection_readers);
-            readers.push(reader);
-          }
+    axios.get(`${context}api/data/documents/unid/${unid}`, {
+      // auth: this.props.auth,	
+      params: {	
+        ps: 100	
+      }	
+    })	
+    .then((response)=>{	
+      const date = new Date(response.data['@modified']).toUTCString();
+      const { 
+        query, databaseName, 
+        databasePath, collectionName, 
+        collection_readers, collection_authors, 
+        formviewfolder, fvfName, 
+        documentHistoryAction, documentHistoryName, documentHistoryTimestamp,
+        AuthorNames, CreatedBy
+      } = response.data;
+      let readers;
+      let authors;
+      if (collection_readers) {
+        readers = [];
+        if (Array.isArray(collection_readers)) { 
+          collection_readers.map((reader) => {
+            let obj = this._getObject(people, reader);
+            readers.push(obj);
+            return null;
+          })
+
+        } else {
+          let reader = this._getObject(people, collection_readers);
+          readers.push(reader);
         }
+      }
 
-        if (collection_authors) {
-          authors = [];
-          if (Array.isArray(collection_authors)) { 
-            collection_authors.map((author) => {
-              let obj = this._getObject(people, author);
-              authors.push(obj);
-              return null;
-            })
+      if (collection_authors) {
+        authors = [];
+        if (Array.isArray(collection_authors)) { 
+          collection_authors.map((author) => {
+            let obj = this._getObject(people, author);
+            authors.push(obj);
+            return null;
+          })
 
-          } else {
-            let author = this._getObject(people, collection_authors);
-            authors.push(author);
-          }
+        } else {
+          let author = this._getObject(people, collection_authors);
+          authors.push(author);
         }
+      }
 
-        let queryAuthor = false;
-        let queryReader = true;
+      let queryAuthor = false;
+      let queryReader = true;
 
-        if (CreatedBy === this.state.auth.userName) {
+      if (CreatedBy === this.state.auth.userName) {
+        queryAuthor = true;
+        queryReader = false;
+      }
+
+      if (!queryAuthor) {
+        if (AuthorNames.indexOf(this.state.auth.userName) > -1) {
           queryAuthor = true;
           queryReader = false;
         }
-
-        if (!queryAuthor) {
-          if (AuthorNames.indexOf(this.state.auth.userName) > -1) {
+      }
+      if (!queryAuthor) {
+        AuthorNames.map((author) => {
+          if (author.charAt(0) === '[' && this.state.auth.roles.indexOf(author.slice(1,-1)) > -1) {
             queryAuthor = true;
             queryReader = false;
           }
+          return null
+        })
+      }
+
+      const q = JSON.parse(query);
+
+      const { databases } = this.state;
+
+      let url1;
+      let url2;
+  
+      if (formviewfolder === 'forms') {
+        url1 = `${context}getFormNamesFromDatabase?OpenAgent&path=${databasePath}`
+        url2 = `${context}getFieldNamesFromForm?OpenAgent&path=${databasePath}&form=${fvfName}`
+      }
+      if (formviewfolder === 'views') {
+        url1 = `${context}getViewFolderNamesFromDatabase?OpenAgent&path=${databasePath}`
+        url2 = `${context}getViewFolderDetailsFromDatabase?OpenAgent&path=${databasePath}&view=${fvfName}`
+      }
+      if (formviewfolder === 'folders') {
+        url1 = `${context}getViewFolderNamesFromDatabase?OpenAgent&path=${databasePath}`
+        url2 = `${context}getViewFolderDetailsFromDatabase?OpenAgent&path=${databasePath}&view=${fvfName}`
+      }
+
+      const getUrl1 = () => {
+        return axios.get(url1);
+      }
+      
+      const getUrl2 = () => {
+        return axios.get(url2);
+      }
+
+      axios.all([getUrl1(), getUrl2()])
+      .then(axios.spread((response1, response2) => {
+        let data1 = response1.data;
+        let entryToUpdate = this._getObject(databases, databasePath);
+
+        if (formviewfolder === 'forms') {
+          entryToUpdate.forms = data1;
         }
-        if (!queryAuthor) {
-          AuthorNames.map((author) => {
-            if (author.charAt(0) === '[' && this.state.auth.roles.indexOf(author.slice(1,-1)) > -1) {
-              queryAuthor = true;
-              queryReader = false;
-            }
-            return null
-          })
+     
+        if (formviewfolder === 'views') {
+          entryToUpdate.viewsfolders = data1;
+        }
+  
+        if (formviewfolder === 'folders') {
+          entryToUpdate.viewsfolders = data1;
         }
 
-        const q = JSON.parse(query);
-
-        //@todo: need to have an initialize object and te object I am changing and merge so so clear all other state
-        // query, selectedDatabase: { databaseName, filepath, formviewfolder, fvfName }, formdata: { queryname, unid, authors, readers }
+        let data2 = response2.data;
+        let databaseToUpdate = this._getObject(databases, databasePath);
+        if (formviewfolder === 'forms') {
+          let entryToUpdate = this._getObject(databaseToUpdate.forms, fvfName);
+          entryToUpdate.fields = data2;
+        }
+        if (formviewfolder === 'views') {
+          let entryToUpdate = this._getObject(databaseToUpdate.viewsfolders, fvfName);
+          entryToUpdate.columns = data2;
+        }
+        if (formviewfolder === 'folders') {
+          let entryToUpdate = this._getObject(databaseToUpdate.viewsfolders, fvfName);
+          entryToUpdate.columns = data2;
+        }
 
         this.setState(
           update(this.state, {
             query: { $set: q },
+            databases: { $set: databases },
             selectedDatabase: {
               filepath: { $set: databasePath },
               databaseName: { $set: databaseName },
@@ -422,30 +519,42 @@ Scott Good https://scott-good.github.io/
           })
         );
 
-      })
+      }));
+
+    })
   }
   
   onChangeResults = (items) => {
+
     this.setState(
       update(this.state, {
-        results: { $set: items },
+        results: { $set: items.data },
         formaction: { 
           runquery: { $set: true },
-          queryValid: { $set: true }
+          queryValid: { $set: true },
+          errormessage: { $set: items.error.number ? items.error.message : '' }
         },
         explain: { $set: '' },
       })
     );
+
   };
 
   onChangeExplain = (explain) => {
-    this.setState({
-      explain: explain,
-    });
+    this.setState(
+      update(this.state, {
+        explain: { $set: explain.data.join('\n') },
+        formaction: { 
+          explainerrormessage: { $set: explain.error.number ? explain.error.message.join('\n') : '' }
+        },
+      })
+    );
+
   };
 
   addTerm = index => {
     let children = this.state.query.children;
+
     const term = {
       id: `term~${uuidv4()}`,
       identifier: "",
@@ -572,11 +681,17 @@ Scott Good https://scott-good.github.io/
 
   onTermChange = (index, attribute, data) => {
     const newValue = typeof data === "object" ? data.key : data;
-
     let children = this.state.query.children;
     let term = this._getObject(children, `term~${index}`);
 
     term[attribute] = newValue;
+
+    if (data.data.type === 'date') {
+      const date = new Date();
+      const dateString = date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2);
+      term.dateValue=date;
+      term.value=dateString;
+    }
 
     this.setState(
       update(this.state, {
@@ -609,13 +724,14 @@ Scott Good https://scott-good.github.io/
 
   onTermDateChange = (id, attribute, data) => {
     if (data) {
-      const newValue =data.getFullYear() + "-" + ('0' + data.getMonth() + 1).slice(-2) + "-" + ('0' + data.getDate()).slice(-2);
-      const children = this.state.query.children;
+      const newValue =data.getFullYear() + "-" + ('0' + (data.getMonth() + 1)).slice(-2) + "-" + ('0' + data.getDate()).slice(-2);
+      let children = this.state.query.children;
       let entryToUpdate = this._getObject(children, id);
 
       entryToUpdate[attribute]=newValue;
       entryToUpdate.dateValue=data;
 
+      console.log(entryToUpdate)
       this.setState(
         update(this.state, {
           query: { children: { $set: children } },
@@ -686,6 +802,9 @@ Scott Good https://scott-good.github.io/
     this.setState(
       update(this.state, {
         query: { selectedColumns: { $set: updatedSelectedItem } },
+        formaction: { queryValid: { $set: false } },
+        formdata: { saved: { $set: false }},
+        explain: { $set: '' },
       })
     );
   };
@@ -774,30 +893,119 @@ Scott Good https://scott-good.github.io/
   };
 
   onImageChoiceGroupChange = (event, option) => {
-    this.setState(
-      update(this.state, {
-        explain: { $set: '' },
-        query: { 
-          id: { $set: `group~0000`},
-          children: { $set: []},
-          selectedColumns: { $set: []},
-        },
-        selectedDatabase: { 
-          formviewfolder: { $set: option.key },
-          fvfName: { $set: '' },
-        },
-      })
-    );
+
+    const context = process.env.NODE_ENV === 'development' ? `/dqlexplorer.nsf/` : ``;
+    const { selectedDatabase: { filepath } } = this.state;
+
+    let url;
+    if (option.key === 'forms') {
+      url = `${context}getFormNamesFromDatabase?OpenAgent&path=${filepath}`
+    }
+    if (option.key === 'views') {
+      url = `${context}getViewFolderNamesFromDatabase?OpenAgent&path=${filepath}`
+    }
+    if (option.key === 'folders') {
+      url = `${context}getViewFolderNamesFromDatabase?OpenAgent&path=${filepath}`
+    }
+
+    axios
+    .get(
+      url,
+      {},
+      {}
+    )
+    .then(response => {
+      let data = response.data;
+      let databases = this.state.databases;
+
+      let entryToUpdate = this._getObject(databases, filepath);
+
+      if (option.key === 'forms') {
+        entryToUpdate.forms = data;
+      }
+   
+      if (option.key === 'views') {
+        entryToUpdate.viewsfolders = data;
+      }
+
+      if (option.key === 'folders') {
+        entryToUpdate.viewsfolders = data;
+      }
+
+      this.setState(
+        update(this.state, {
+          explain: { $set: '' },
+          query: { 
+            id: { $set: `group~0000`},
+            children: { $set: []},
+            selectedColumns: { $set: []},
+          },
+          selectedDatabase: { 
+            formviewfolder: { $set: option.key },
+            fvfName: { $set: '' },
+          },
+          databases: { $set: databases },
+        })
+      );
+    });
   }
 
   onChangeViewFolderName = (event, option) => {
-    this.setState(
-      update(this.state, {
-        selectedDatabase: { 
-          fvfName: { $set: option.text },
-        },
-      })
-    );
+
+    const context = process.env.NODE_ENV === 'development' ? `/dqlexplorer.nsf/` : ``;
+
+    const { selectedDatabase: { filepath, formviewfolder } } = this.state;
+    let url;
+    if (formviewfolder === 'forms') {
+      url = `${context}getFieldNamesFromForm?OpenAgent&path=${filepath}&form=${option.key}`
+    }
+    if (formviewfolder === 'views') {
+      url = `${context}getViewFolderDetailsFromDatabase?OpenAgent&path=${filepath}&view=${option.key}`
+    }
+    if (formviewfolder === 'folders') {
+      url = `${context}getViewFolderDetailsFromDatabase?OpenAgent&path=${filepath}&view=${option.key}`
+    }
+
+    axios
+    .get(
+      url,
+      {},
+      {}
+    )
+    .then(response => {
+      let data = response.data;
+      let databases = this.state.databases;
+      let databaseToUpdate = this._getObject(databases, filepath);
+      let entryToUpdate;
+      if (formviewfolder === 'forms') {
+        entryToUpdate = this._getObject(databaseToUpdate.forms, option.key);
+        entryToUpdate.fields = data;
+      }
+   
+      if (formviewfolder === 'views') {
+        entryToUpdate = this._getObject(databaseToUpdate.viewsfolders, option.key);
+        entryToUpdate.columns = data;
+      }
+
+      if (formviewfolder === 'folders') {
+        entryToUpdate = this._getObject(databaseToUpdate.viewsfolders, option.key);
+        entryToUpdate.columns = data;
+      }
+
+      this.setState(
+        update(this.state, {
+          databases: { $set: databases },
+          selectedDatabase: { 
+            fvfName: { $set: option.key },
+          },
+          formaction: { queryValid: { $set: false } },
+          formdata: { saved: { $set: false }},
+          explain: { $set: '' },
+          query: { selectedColumns: { $set: [] } },
+        })
+      );
+    });
+
   }
 
   render() {
@@ -824,12 +1032,7 @@ Scott Good https://scott-good.github.io/
     else
     {
       for(var prop in theObject) {
-        if(prop === 'id') {
-          if(theObject[prop] === value) {
-            return theObject;
-          }
-        }
-        if(prop === 'tertiaryText') {
+        if((prop === 'id') || (prop === 'tertiaryText') || (prop === 'filepath') || (prop === 'name') || (prop === 'alias')) {
           if(theObject[prop] === value) {
             return theObject;
           }

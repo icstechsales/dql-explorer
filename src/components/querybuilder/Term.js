@@ -1,3 +1,19 @@
+/**
+ * Copyright (c) IBM Corp. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the “License”);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an “AS IS” BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React from "react";
 import { Dropdown } from "office-ui-fabric-react/lib/Dropdown";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
@@ -110,26 +126,26 @@ const Term = ({ index, indexValue, addTermValue, removeTerm, onTermChange, onVal
           text: field.displayName,
           data: { icon: iconType === 'date' ? 'Calendar' : iconType === 'number' ? 'NumberSymbol' : iconType === 'name' ? 'user' : 'InsertTextBox',
                   type: iconType }
-        })
-        options.sort(compare);
+        });
         return options;
       })
     }
   }
 
   if ((formviewfolder === 'views') || (formviewfolder === 'folders')) {  
-    selectedObject = selectedDatabase.viewsfolders.find(viewfolder => viewfolder.name === fvfName);
-
+    selectedObject = selectedDatabase.viewsfolders.find(viewfolder => viewfolder.alias !== '' ? viewfolder.alias === fvfName : viewfolder.name === fvfName);
     if (selectedObject) {
       selectedObject.columns.map((column) => {
         let iconType = 'text';
 
-        options.push({
-          key: column.name,
-          text: column.displayName,
-          data: { icon: 'InsertTextBox',
-                type: iconType }
-        })
+        if (column.displayName !== '') {
+          options.push({
+            key: column.name,
+            text: column.displayName,
+            data: { icon: 'InsertTextBox',
+                  type: iconType }
+          });
+        }
         return options;
       })
     }
@@ -162,7 +178,7 @@ const Term = ({ index, indexValue, addTermValue, removeTerm, onTermChange, onVal
               onChange={(event, data) =>
                 onTermChange(index, "identifier", data)
               }
-              options={options}
+              options={options.sort(compare)}
               onRenderOption={_onRenderOption}
             />
           </div>

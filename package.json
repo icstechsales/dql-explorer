@@ -1,6 +1,6 @@
 {
   "name": "dql-explorer",
-  "version": "0.2.0",
+  "version": "0.2.6",
   "author": "Dimitri Prosper <dimitri_prosper@us.ibm.com>",
   "contributors": [
     {
@@ -8,7 +8,7 @@
       "email": "scott.good@us.ibm.com"
     }
   ],
-  "license": "IBM Internal Use Only until fate determined",
+  "license": "Apache-2.0",
   "description": "DQL Explorer PoC for IBM Think 2019",
   "private": true,
   "dependencies": {
@@ -30,7 +30,7 @@
     "react": "^16.7.0",
     "react-app-rewired": "^2.1.0",
     "react-dom": "^16.7.0",
-    "react-scripts": "2.1.3",
+    "react-scripts": "2.1.8",
     "typescript": "^3.2.4",
     "uuid": "^3.3.2"
   },
