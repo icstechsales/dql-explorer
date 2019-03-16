@@ -1,6 +1,6 @@
 {
   "name": "dql-explorer",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "author": "Dimitri Prosper <dimitri_prosper@us.ibm.com>",
   "contributors": [
     {
@@ -8,7 +8,7 @@
       "email": "scott.good@us.ibm.com"
     }
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "description": "DQL Explorer PoC for IBM Think 2019",
   "private": true,
   "dependencies": {
@@ -49,6 +49,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://domino.yourdomain.com",
-  "homepage": "http://domino.yourdomain.com/dqlexplorer.nsf"
+  "proxy": "http://myorg3.ibmcollabcloud.com",
+  "homepage": "http://myorg3.ibmcollabcloud.com/dqlexplorer.nsf"
 }
