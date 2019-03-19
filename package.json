@@ -49,8 +49,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy1": "http://domino.yourdomain.com",
-  "proxy": "http://myorg3.ibmcollabcloud.com",
-  "homepage1": "http://domino.yourdomain.com/dqlexplorer.nsf",
-  "homepage": "http://myorg3.ibmcollabcloud.com/dqlexplorer.nsf"
+  "proxy": "http://domino.yourdomain.com",
+  "homepage": "http://domino.yourdomain.com/dqlexplorer.nsf"
 }
