@@ -686,7 +686,7 @@ Scott Good https://scott-good.github.io/
 
     term[attribute] = newValue;
 
-    if (data.data.type === 'date') {
+    if ((typeof data === "object") && (data.data) && (data.data.type === 'date')) {
       const date = new Date();
       const dateString = date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2);
       term.dateValue=date;
