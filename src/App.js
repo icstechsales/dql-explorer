@@ -23,6 +23,7 @@ import './App.css';
 import Main from './components/Main';
 import MainHeader from './components/MainHeader';
 
+import { addYears } from 'office-ui-fabric-react/lib/utilities/dateMath/DateMath';
 import { registerIcons } from '@uifabric/styling';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -40,6 +41,9 @@ import {
  } from '@fortawesome/free-solid-svg-icons';
 
 import { people } from './components/querybuilder/PeoplePicker';
+
+const today = new Date(Date.now());
+const maxDate = addYears(today, 100);
 
 library.add(faSave, faUser, faPlusCircle, faCalendar, faCheck, faDownload, faSortAlphaDown, faSortAlphaUp, faSortAmountDown, faTimes, faHashtag, faBold, faTrashAlt, faShareSquare, faDatabase, faFolder, faTasks, faGripHorizontal, faGlobe, faUsers, faTable, faFile, faChevronDown, faChevronUp, faChevronRight, faChevronLeft, faArrowDown, faArrowUp, faArrowLeft, faArrowRight, faTag)
 
@@ -724,14 +728,33 @@ Scott Good https://scott-good.github.io/
 
   onTermDateChange = (id, attribute, data) => {
     if (data) {
-      const newValue =data.getFullYear() + "-" + ('0' + (data.getMonth() + 1)).slice(-2) + "-" + ('0' + data.getDate()).slice(-2);
+      const newValue = data.getFullYear() + "-" + ('0' + (data.getMonth() + 1)).slice(-2) + "-" + ('0' + data.getDate()).slice(-2);
       let children = this.state.query.children;
       let entryToUpdate = this._getObject(children, id);
 
-      entryToUpdate[attribute]=newValue;
-      entryToUpdate.dateValue=data;
+      if ((this._isValidDate(data.getDate(), data.getMonth() + 1, data.getFullYear())) && (data < maxDate)) {
+        entryToUpdate[attribute]=newValue;
+        entryToUpdate.dateValue=data;
+      } else {
+        entryToUpdate[attribute]='';
+        entryToUpdate.dateValue=null;
+      }
 
-      console.log(entryToUpdate)
+      this.setState(
+        update(this.state, {
+          query: { children: { $set: children } },
+          formaction: { queryValid: { $set: false } },
+          formdata: { saved: { $set: false }},
+          explain: { $set: '' },     
+        })
+      );
+    } else {
+      let children = this.state.query.children;
+      let entryToUpdate = this._getObject(children, id);
+
+      entryToUpdate[attribute]='';
+      entryToUpdate.dateValue=null;
+
       this.setState(
         update(this.state, {
           query: { children: { $set: children } },
@@ -1018,6 +1041,22 @@ Scott Good https://scott-good.github.io/
       </AuthCtx.Provider>
     );
   }
+
+  _daysInMonth = (m, y) => {
+    switch (m) {
+        case 1 :
+            return (y % 4 === 0 && y % 100) || y % 400 === 0 ? 29 : 28;
+        case 8 : case 3 : case 5 : case 10 :
+            return 30;
+        default :
+            return 31
+    }
+  };
+
+  _isValidDate = (d, m, y) => {
+    m = parseInt(m, 10) - 1;
+    return m >= 0 && m < 12 && d > 0 && d <= this._daysInMonth(m, y);
+  };
 
   _getObject = (theObject, value) => {
     var result = null;

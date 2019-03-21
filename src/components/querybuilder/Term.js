@@ -20,8 +20,13 @@ import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { DefaultButton, IconButton } from "office-ui-fabric-react/lib/Button";
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker';
+import { addYears } from 'office-ui-fabric-react/lib/utilities/dateMath/DateMath';
+
 import withApp from '../../withApp';
 import DateTextNumber from "./DateTextNumber";
+
+const today = new Date(Date.now());
+const maxDate = addYears(today, 100);
 
 const DayPickerStrings = {
   months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -35,7 +40,8 @@ const DayPickerStrings = {
   nextYearAriaLabel: 'Go to next year',
   closeButtonAriaLabel: 'Close date picker',
   isRequiredErrorMessage: 'Start date is required.',
-  invalidInputErrorMessage: 'Invalid date format.'
+  invalidInputErrorMessage: 'Invalid date format.',
+  isOutOfBoundsErrorMessage: `Date must be before ${maxDate.toLocaleDateString()}`
 };
 
 var booleans = [
@@ -55,22 +61,26 @@ var booleanOptions = booleans.map((boolean, index) => {
 });
 
 const desc = 'Date field.';
+const _daysInMonth = (m, y) => {
+  switch (m) {
+      case 1 :
+          return (y % 4 === 0 && y % 100) || y % 400 === 0 ? 29 : 28;
+      case 8 : case 3 : case 5 : case 10 :
+          return 30;
+      default :
+          return 31
+  }
+};
+
+const _isValidDate = (d, m, y) => {
+  m = parseInt(m, 10) - 1;
+  return m >= 0 && m < 12 && d > 0 && d <= _daysInMonth(m, y);
+};
 
 const _onFormatDate = (date) => {
   let dt = new Date(date);
-  return (dt.getMonth() + 1)+ '/' + dt.getDate()  + '/' + (dt.getFullYear() % 100);
-};
-
-const _onParseDateFromString = (value) => {
-  const date = this.props.childQuery.value || new Date();
-  const values = (value || '').trim().split('/');
-  const day = values.length > 0 ? Math.max(1, Math.min(31, parseInt(values[0], 10))) : date.getDate();
-  const month = values.length > 1 ? Math.max(1, Math.min(12, parseInt(values[1], 10))) - 1 : date.getMonth();
-  let year = values.length > 2 ? parseInt(values[2], 10) : date.getFullYear();
-  if (year < 100) {
-    year += date.getFullYear() - (date.getFullYear() % 100);
-  }
-  return new Date(year, month, day);
+  let display = _isValidDate(dt.getDate(), dt.getMonth() + 1, dt.getFullYear()) ? (dt.getMonth() + 1) + '/' + dt.getDate()  + '/' + (dt.getFullYear()) : '';
+  return display;
 };
 
 const _onRenderOption = (option) => {
@@ -244,10 +254,13 @@ const Term = ({ index, indexValue, addTermValue, removeTerm, onTermChange, onVal
                 allowTextInput={true}
                 ariaLabel={desc}
                 strings={DayPickerStrings}
-                value={childQuery.dateValue ? new Date(childQuery.dateValue) : new Date()}
+                // value={childQuery.dateValue ? new Date(childQuery.dateValue) : new Date()}
+                value={childQuery.dateValue}
                 onSelectDate={_onSelectDate}
                 formatDate={_onFormatDate}
-                parseDateFromString={_onParseDateFromString}
+                initialPickerDate={new Date()}
+                highlightSelectedMonth={true}
+                maxDate={maxDate}
               />
               )}
 
@@ -318,7 +331,6 @@ const Term = ({ index, indexValue, addTermValue, removeTerm, onTermChange, onVal
                     onValuesChange(childQuery.id, event, item)
                   }
                   multiSelect
-                  // isDisabled={childQuery.options.length === 0 ? true : false}
                   disabled={childQuery.options.length === 0 ? true : false}
                   options={childQuery.options}
                 />
