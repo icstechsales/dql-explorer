@@ -10,7 +10,9 @@ Preparation:
 5. Access the database with a browser: https://<domino_server_url>/dqlexplorer.nsf/index.html
 6. DQL Explorer is just a gateway to access other databases data. So you now need to  have DQL Explorer list some databases you want to use. 
 7. As of now, DQL requires that you issue these commands on the Domino console:
+
 load updall <database> -e
+
 load updall <database> -d
   
 Now you are ready to create your first DQL Query. As an example we want to use names.nsf
