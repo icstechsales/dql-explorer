@@ -1,4 +1,26 @@
 This project is an exploration of data in Domino databases leveraging Domino Query Language.
+## Quickstart
+If you are here to try out DQL Explorer, learn about DQL and just want to get started... then:
+
+Preparation:
+1. Download the dqlexplorer.nsf
+2. Deploy it to a Domino 10.0.1 Server (into the data directory root, not a sub directory for now)
+3. Sign the database with your signer ID, you can use the server id for instance.
+4. Set an appropiate ACL - as the database allows to create and store DQL queries, you want to define some users with Author access.
+5. Access the database with a browser: https://<domino_server_url>/dqlexplorer.nsf/index.html
+6. DQL Explorer is just a gateway to access other databases data. So you now need to  have DQL Explorer list some databases you want to use. 
+7. As of now, DQL requires that you issue these commands on the Domino console:
+load updall <database> -e
+load updall <database> -d
+  
+Now you are ready to create your first DQL Query. As an example we want to use names.nsf
+
+1. Add names.nsf to the listed databases
+2. load updall names.nsf -e
+3. load updall names.nsf -d
+4. Define your query
+5. Run your query
+
 ## Watch the demos
 
 Luis Guirigay and Andrew Manby introduce DQL Explorer at Think 2019: https://youtu.be/OMjSND5cPsE
